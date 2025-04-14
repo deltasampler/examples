@@ -1,4 +1,4 @@
-#include <stdint.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <SDL3/SDL.h>
 #include <gl/gl.h>
@@ -70,13 +70,19 @@ int32_t main(int32_t, char**) {
     ImGui_ImplOpenGL3_Init("#version 130");
 
     bool done = false;
+    int32_t w, h;
+    SDL_GetWindowSize(window, &w, &h);
 
     while (!done) {
         SDL_Event event;
 
         while (SDL_PollEvent(&event)) {
             ImGui_ImplSDL3_ProcessEvent(&event);
-    
+
+            if (event.type == SDL_EVENT_WINDOW_RESIZED && event.window.windowID == SDL_GetWindowID(window)) {
+                SDL_GetWindowSize(window, &w, &h);
+            }
+
             if (event.type == SDL_EVENT_QUIT) {
                 done = true;
             }
@@ -100,8 +106,8 @@ int32_t main(int32_t, char**) {
 
         ImGui::Render();
 
-        glViewport(0, 0, int(io.DisplaySize.x), int(io.DisplaySize.y));
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glViewport(0, 0, w, h);
+        glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
