@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <SDL3/SDL.h>
-#include <gl/gl.h>
+#include <glad/gl.h>
 
 int32_t main(int32_t, char**) {
     if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD)) {

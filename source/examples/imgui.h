@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <SDL3/SDL.h>
-#include <gl/gl.h>
+#include <glad/gl.h>
 #include <imgui/imgui.h>
 #include <imgui_sdl/imgui_impl_sdl3.h>
 #include <imgui_gl/imgui_impl_opengl3.h>
