@@ -1,7 +1,7 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <cl/type.h>
 
-int32_t main(int32_t, char**) {
+s32 main() {
     printf("Hello, World!\n");
 
     return 0;

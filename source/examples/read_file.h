@@ -1,29 +1,23 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <cl/type.h>
 
 #ifndef ROOT_PATH
 #define ROOT_PATH "./"
 #endif
 
-int32_t main(int32_t, char**) {
+s32 main() {
     FILE* file = fopen(ROOT_PATH"assets/test.txt", "r");
-    size_t cap = 0;
-    char* line = nullptr;
-    size_t line_len = 0;
+    char line[256];
 
     if (file == nullptr) {
         return -1;
     }
 
-    while ((line_len = getline(&line, &cap, file)) != -1) {
+    while (fgets(line, sizeof(line), file)) {
         printf("%s", line);
     }
 
     fclose(file);
-
-    if (line) {
-        free(line);
-    }
 
     return 0;
 }

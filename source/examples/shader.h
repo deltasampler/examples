@@ -1,14 +1,14 @@
-#include <stdlib.h>
 #include <stdio.h>
 #include <SDL3/SDL.h>
 #include <glad/gl.h>
 #include <gl/shader.h>
+#include <cl/type.h>
 
 #ifndef ROOT_PATH
 #define ROOT_PATH "./"
 #endif
 
-int32_t main(int32_t, char**) {
+s32 main() {
     if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD)) {
         printf("ERROR: SDL_Init(): %s\n", SDL_GetError());
 
@@ -23,7 +23,7 @@ int32_t main(int32_t, char**) {
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
-    uint32_t window_flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIDDEN;
+    u32 window_flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIDDEN;
     SDL_Window* window = SDL_CreateWindow("Project", 1280, 720, window_flags);
 
     if (window == nullptr) {
@@ -52,15 +52,15 @@ int32_t main(int32_t, char**) {
     }
 
     bool done = false;
-    int32_t w, h;
+    s32 w, h;
     SDL_GetWindowSize(window, &w, &h);
 
     prog_src_t program_source;
     prog_src_load(program_source, ROOT_PATH"assets/shaders/main.glsl");
-    uint32_t program = program_create(program_source);
+    u32 program = program_create(program_source);
     prog_src_del(program_source);
 
-    uint32_t vao;
+    u32 vao;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
