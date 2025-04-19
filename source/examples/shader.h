@@ -55,10 +55,7 @@ s32 main() {
     s32 w, h;
     SDL_GetWindowSize(window, &w, &h);
 
-    prog_src_t program_source;
-    prog_src_load(program_source, ROOT_PATH"assets/shaders/main.glsl");
-    u32 program = program_create(program_source);
-    prog_src_del(program_source);
+    u32 program = program_load(ROOT_PATH"assets/shaders/main.glsl");
 
     u32 vao;
     glGenVertexArrays(1, &vao);
@@ -95,6 +92,11 @@ s32 main() {
 
         SDL_GL_SwapWindow(window);
     }
+
+    glDeleteProgram(program);
+
+    glBindVertexArray(0);
+    glDeleteVertexArrays(1, &vao);
 
     SDL_GL_DestroyContext(gl_context);
     SDL_DestroyWindow(window);
