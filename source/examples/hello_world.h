@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <cl/type.h>
+#include <cl/types.h>
 
 s32 main() {
     printf("Hello, World!\n");

@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <cl/type.h>
+#include <cl/types.h>
 
 #ifndef ROOT_PATH
 #define ROOT_PATH "./"

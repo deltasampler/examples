@@ -4,7 +4,7 @@
 #include <imgui/imgui.h>
 #include <imgui_sdl/imgui_impl_sdl3.h>
 #include <imgui_gl/imgui_impl_opengl3.h>
-#include <cl/type.h>
+#include <cl/types.h>
 
 s32 main() {
     if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD)) {

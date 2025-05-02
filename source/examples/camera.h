@@ -2,7 +2,7 @@
 #include <SDL3/SDL.h>
 #include <glad/gl.h>
 #include <gl/shader.h>
-#include <cl/type.h>
+#include <cl/types.h>
 #include <cl/camera/cam2.h>
 
 #ifndef ROOT_PATH
