@@ -1,13 +1,9 @@
+#pragma once
+
 #include <stdio.h>
 #include <SDL3/SDL.h>
 #include <glad/gl.h>
-#include <gl/shader.h>
 #include <cl/types.h>
-#include <cl/camera/cam2.h>
-
-#ifndef ROOT_PATH
-#define ROOT_PATH "./"
-#endif
 
 s32 main() {
     if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD)) {
@@ -52,35 +48,23 @@ s32 main() {
         return -1;
     }
 
-    bool done = false;
-    s32 w, h;
-    SDL_GetWindowSize(window, &w, &h);
+    bool running = true;
+    s32 w, h; SDL_GetWindowSize(window, &w, &h);
 
-    u32 program = program_load(ROOT_PATH"assets/shaders/camera.glsl");
-    s32 u_projection = glGetUniformLocation(program, "u_projection");
-    s32 u_view = glGetUniformLocation(program, "u_view");
-
-    u32 vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-
-    cam2_t cam = cam2_new();
-    const bool* keystate = SDL_GetKeyboardState(0);
-
-    while (!done) {
+    while (running) {
         SDL_Event event;
 
         while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_EVENT_WINDOW_RESIZED && event.window.windowID == SDL_GetWindowID(window)) {
-                SDL_GetWindowSize(window, &w, &h);
-            }
-
             if (event.type == SDL_EVENT_QUIT) {
-                done = true;
+                running = false;
             }
 
             if (event.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED && event.window.windowID == SDL_GetWindowID(window)) {
-                done = true;
+                running = false;
+            }
+
+            if (event.type == SDL_EVENT_WINDOW_RESIZED && event.window.windowID == SDL_GetWindowID(window)) {
+                SDL_GetWindowSize(window, &w, &h);
             }
         }
 
@@ -90,40 +74,12 @@ s32 main() {
             continue;
         }
 
-        if (keystate[SDL_SCANCODE_A]) {
-            cam2_move_right(cam, -1.0f);
-        }
-
-        if (keystate[SDL_SCANCODE_D]) {
-            cam2_move_right(cam, 1.0f);
-        }
-
-        if (keystate[SDL_SCANCODE_S]) {
-            cam2_move_up(cam, -1.0f);
-        }
-
-        if (keystate[SDL_SCANCODE_W]) {
-            cam2_move_up(cam, 1.0f);
-        }
-
-        cam2_compute_proj(cam, w, h);
-        cam2_compute_view(cam);
-
         glViewport(0, 0, w, h);
         glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        glUseProgram(program);
-        glUniformMatrix4fv(u_projection, 1, false, cam.projection.arr);
-        glUniformMatrix4fv(u_view, 1, false, cam.view.arr);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
         SDL_GL_SwapWindow(window);
     }
-
-    glDeleteProgram(program);
-
-    glBindVertexArray(0);
-    glDeleteVertexArrays(1, &vao);
 
     SDL_GL_DestroyContext(gl_context);
     SDL_DestroyWindow(window);
