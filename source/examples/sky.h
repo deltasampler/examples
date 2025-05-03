@@ -18,7 +18,7 @@ u32 program;
 u32 vao;
 s32 u_projection;
 s32 u_view;
-sky_t sky;
+sky_rdata_t sky;
 
 const bool* keystate;
 
@@ -34,7 +34,7 @@ void init() {
 
     keystate = SDL_GetKeyboardState(0);
 
-    sky_renderer_init();
+    sky_rend_init();
 }
 
 void shut() {
@@ -43,7 +43,7 @@ void shut() {
     glBindVertexArray(0);
     glDeleteVertexArrays(1, &vao);
 
-    sky_renderer_shut();
+    sky_rend_shut();
 }
 
 void process_event(SDL_Event& event) {
@@ -80,7 +80,7 @@ void update() {
 }
 
 void render() {
-    sky_renderer_render(sky, cam);
+    sky_rend_render(sky, cam);
 
     glUseProgram(program);
     glUniformMatrix4fv(u_projection, 1, false, cam.projection.arr);
@@ -89,7 +89,7 @@ void render() {
 }
 
 void gui() {
-    sky_renderer_imgui(sky);
+    sky_rend_imgui(sky);
 }
 
 #define USE_IMGUI
