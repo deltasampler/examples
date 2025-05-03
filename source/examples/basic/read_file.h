@@ -8,7 +8,7 @@
 #endif
 
 s32 main() {
-    FILE* file = fopen(ROOT_PATH"assets/test.txt", "r");
+    FILE* file = fopen(ROOT_PATH"modules/examples/assets/test.txt", "r");
     char line[256];
 
     if (file == nullptr) {

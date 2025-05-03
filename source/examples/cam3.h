@@ -23,7 +23,7 @@ const bool* keystate;
 void init() {
     cam = cam3_new();
 
-    program = program_load(ROOT_PATH"assets/shaders/camera.glsl");
+    program = program_load(ROOT_PATH"modules/examples/assets/camera.glsl");
     u_projection = glGetUniformLocation(program, "u_projection");
     u_view = glGetUniformLocation(program, "u_view");
 

@@ -14,7 +14,7 @@ u32 program;
 u32 vao;
 
 void init() {
-    program = program_load(ROOT_PATH"assets/shaders/main.glsl");
+    program = program_load(ROOT_PATH"modules/examples/assets/simple.glsl");
 
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
