@@ -1,10 +1,14 @@
 #pragma once
 
+#include <stdio.h>
 #include <SDL3/SDL.h>
 #include <glad/gl.h>
 #include <cl/camera/cam3.h>
+#include <cl/math/rand_r.h>
+#include <cl/math/vec3_color_f.h>
 #include <gl/shader.h>
-#include <engine/renderers/sky.h>
+#include <engine/renderers/sky_rend.h>
+#include <engine/renderers/point_rend.h>
 
 #ifndef ROOT_PATH
 #define ROOT_PATH "./"
@@ -12,38 +16,42 @@
 
 #include <engine/test/context.h>
 
-cam3_t cam;
-
-u32 program;
-u32 vao;
-s32 u_projection;
-s32 u_view;
-sky_rdata_t sky;
-
 const bool* keystate;
 
+cam3_t cam;
+
+sky_rdata_t sky;
+point_rdata_t point_rdata;
+
 void init() {
-    cam = cam3_new();
-
-    program = program_load(ROOT_PATH"modules/examples/assets/camera.glsl");
-    u_projection = glGetUniformLocation(program, "u_projection");
-    u_view = glGetUniformLocation(program, "u_view");
-
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-
     keystate = SDL_GetKeyboardState(0);
 
+    cam = cam3_new();
+
     sky_rend_init();
+
+    // point renderer
+    point_rend_init();
+
+    darr_t<point_t>& points = point_rdata.points;
+    darr_new(points, 1024);
+
+    for (usize i = 0; i < points.cap; i += 1) {
+        darr_push(points, {
+            fvec3(rand_in(-50.0f, 50.0f), rand_in(-50.0f, 50.0f), rand_in(-50.0f, 50.0f)),
+            rand_in(1.0f, 2.0f),
+            fvec3(frand(), frand(), frand())
+        });
+    }
+
+    point_rdata_build(point_rdata);
 }
 
 void shut() {
-    glDeleteProgram(program);
-
-    glBindVertexArray(0);
-    glDeleteVertexArrays(1, &vao);
-
     sky_rend_shut();
+
+    point_rdata_clear(point_rdata);
+    point_rend_shut();
 }
 
 void process_event(SDL_Event& event) {
@@ -81,16 +89,7 @@ void update() {
 
 void render() {
     sky_rend_render(sky, cam);
-
-    glUseProgram(program);
-    glUniformMatrix4fv(u_projection, 1, false, cam.projection.arr);
-    glUniformMatrix4fv(u_view, 1, false, cam.view.arr);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    point_rend_render(point_rdata, cam);
 }
 
-void gui() {
-    sky_rend_imgui(sky);
-}
-
-#define USE_IMGUI
 #include <engine/test/main.h>
